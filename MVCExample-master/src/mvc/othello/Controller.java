@@ -1,5 +1,6 @@
 package mvc.othello;
 import com.mrjaffesclass.apcs.messenger.*;
+import java.util.Arrays;
 
 /**
  * 
@@ -53,20 +54,36 @@ public class Controller implements MessageHandler {
    * "this" refers to this controller object.
    */
   public void init() {
+    
     // This is where you would subscribe to any messages the controller
     // would need to process
     // A sample subscriber call would be like...
     //mvcMessaging.subscribe("view:toggleButtonClick", this);
+    mvcMessaging.subscribe("printOutput", this);
+    mvcMessaging.subscribe("gameWon", this);
+    mvcMessaging.subscribe("gameUpdated", this);
+    mvcMessaging.subscribe("updateBoard", this);
+    mvcMessaging.subscribe("moveMade", this);
+    mvcMessaging.subscribe("squaresCountedWhite", this);
+    mvcMessaging.subscribe("squaresCountedBlack", this);
   }
 
   @Override
   public void messageHandler(String messageName, Object messagePayload) {
-    if (messagePayload != null) {
-      System.out.println("MSG: received by controller: "+messageName+" | "+messagePayload.toString());
-    } else {
-      System.out.println("MSG: received by controller: "+messageName+" | No data sent");
-    }
     // This is where the controller would handle any messages
+    if (messagePayload != null) {
+      System.out.println("MSG: received by model: "+messageName+" | "+messagePayload.toString());
+    } else {
+      System.out.println("MSG: received by model: "+messageName+" | No data sent");
+    }
+    switch (messageName) {
+        case "gameUpdated": {
+            String[][] gameboard = (String[][]) messagePayload;
+            for (int i = 0; i < 8; i++) {
+                System.out.println(Arrays.toString(gameboard[i]));
+            }
+        }
+    }
   }
 
   /**
